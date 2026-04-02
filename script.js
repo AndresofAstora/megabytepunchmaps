@@ -11,7 +11,7 @@ const map = L.map('map', {
 // Move zoom to right
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-const bounds = [[0, 0], [mapHeight, mapWidth]];
+const bounds = [[0, 0], [1000, 3411]];
 L.imageOverlay('images/map-megabyte-electro1.png', bounds).addTo(map);
 map.fitBounds(bounds);
 
