@@ -162,10 +162,10 @@ body {
     <div class="legend">
         <label><input type="checkbox" checked data-type="Start"> Start</label><br>
         <label><input type="checkbox" checked data-type="Checkpoint"> Checkpoint</label><br>
-        <label><input type="checkbox" checked data-type="Bit Chest"> Bit Chest</label><br>
-        <label><input type="checkbox" checked data-type="Par Chest"> Part Chest</label><br>
-        <label><input type="checkbox" checked data-type="Color Capsule"> Color Capsule</label><br>
-        <label><input type="checkbox" checked data-type="Stage Exit"> Stage Exit</label><br>
+        <label><input type="checkbox" checked data-type="Bit-Chest"> Bit Chest</label><br>
+        <label><input type="checkbox" checked data-type="Part-Chest"> Part Chest</label><br>
+        <label><input type="checkbox" checked data-type="Color-Capsule"> Color Capsule</label><br>
+        <label><input type="checkbox" checked data-type="Stage-Exit"> Stage Exit</label><br>
         <button id="toggleAll">Toggle All</button>
     </div>
 
@@ -191,20 +191,20 @@ const maps = {
             {x: 200, y: 150, type: 'checkpoint'},
             {x: 200, y: 150, type: 'checkpoint'},
             {x: 200, y: 150, type: 'checkpoint'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'bit chest'},
-            {x: 200, y: 150, type: 'part chest'},
-            {x: 200, y: 150, type: 'part chest'},
-            {x: 200, y: 150, type: 'part chest'},
-            {x: 200, y: 150, type: 'part chest'},
-            {x: 200, y: 150, type: 'part chest'},
-            {x: 200, y: 150, type: 'color capsule'},
-            {x: 400, y: 300, type: 'stage exit'}
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'bit-chest'},
+            {x: 200, y: 150, type: 'part-chest'},
+            {x: 200, y: 150, type: 'part-chest'},
+            {x: 200, y: 150, type: 'part-chest'},
+            {x: 200, y: 150, type: 'part-chest'},
+            {x: 200, y: 150, type: 'part-chest'},
+            {x: 200, y: 150, type: 'color-capsule'},
+            {x: 400, y: 300, type: 'stage-exit'}
         ]
     },
     map2: {
@@ -344,7 +344,6 @@ mapWrapper.addEventListener('click', e => {
     const x = Math.round((e.clientX - rect.left) / scale);
     const y = Math.round((e.clientY - rect.top) / scale);
 
-    const text = `${x}, ${y}`;
     const text = `x:${x}, y:${y}`;
 
     navigator.clipboard?.writeText(text) || prompt("Copy:", text);
