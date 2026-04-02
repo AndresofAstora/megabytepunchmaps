@@ -308,10 +308,13 @@ window.addEventListener('mousemove', e => {
 });
 
 /* COORDS */
-mapImage.addEventListener('mousemove', e => {
-    const rect = mapImage.getBoundingClientRect();
+mapWrapper.addEventListener('mousemove', e => {
+    const rect = mapWrapper.getBoundingClientRect();
+
+    // convert screen → map space
     const x = Math.round((e.clientX - rect.left) / scale);
     const y = Math.round((e.clientY - rect.top) / scale);
+
     document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
 });
 
