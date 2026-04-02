@@ -127,9 +127,9 @@
 
 <!-- MENU -->
 <div id="menu" class="menu">
-    <div class="map-btn" onclick="openMap('map1')">Electro Caves 1</div>
-    <div class="map-btn" onclick="openMap('map2')">Electro Caves 2</div>
-    <div class="map-btn" onclick="openMap('map3')">Electro Caves 3</div>
+<div class="map-btn" data-map="map1">Electro Caves 1</div>
+<div class="map-btn" data-map="map2">Electro Caves 2</div>
+<div class="map-btn" data-map="map3">Electro Caves 3</div>
 </div>
 
 <!-- MAP VIEW -->
@@ -187,14 +187,25 @@ const maps = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+
     const mapImg = document.getElementById('mapImage');
 
+    // ✅ FIX: bind button clicks properly
+    document.querySelectorAll('.map-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mapKey = btn.dataset.map;
+            openMap(mapKey);
+        });
+    });
+
+    // coordinates
     mapImg.addEventListener('mousemove', e => {
         const rect = mapImg.getBoundingClientRect();
         const x = Math.round((e.clientX - rect.left) / scale);
         const y = Math.round((e.clientY - rect.top) / scale);
         document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
     });
+
 });
 
 function openMap(mapKey) {
