@@ -1,14 +1,19 @@
-body, html {
+html, body {
   margin: 0;
   height: 100%;
   background-color: #000;
-  color: #fff;
-  font-family: Arial, sans-serif;
 }
 
+/* THIS is the important fix */
 #map {
   height: 100vh;
   width: 100%;
+  background-color: #000; /* ensures visible black background */
+}
+
+/* Leaflet container override (prevents gray tiles showing through) */
+.leaflet-container {
+  background: #000 !important;
 }
 
 /* Legend panel */
@@ -20,7 +25,7 @@ body, html {
   padding: 15px;
   border-radius: 8px;
   z-index: 1000;
-  max-width: 200px;
+  color: #fff;
 }
 
 #legend h3 {
