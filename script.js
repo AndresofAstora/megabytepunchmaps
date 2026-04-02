@@ -1,5 +1,5 @@
-const mapWidth = 2000;
-const mapHeight = 1500;
+const mapWidth = 3411;
+const mapHeight = 1000;
 
 const map = L.map('map', {
   crs: L.CRS.Simple,
@@ -12,18 +12,42 @@ const map = L.map('map', {
 L.control.zoom({ position: 'topright' }).addTo(map);
 
 const bounds = [[0, 0], [mapHeight, mapWidth]];
-L.imageOverlay('images/my-map.png', bounds).addTo(map);
+L.imageOverlay('images/map-megabyte-electro1.png', bounds).addTo(map);
 map.fitBounds(bounds);
 
 // --- Custom Icons ---
 const icon1 = L.icon({
-  iconUrl: 'images/marker-icon.png',
+  iconUrl: 'images/marker-start.png',  // replace with different icon if desired
   iconSize: [32, 32],
   iconAnchor: [16, 32]
 });
 
 const icon2 = L.icon({
-  iconUrl: 'images/marker-icon.png', // replace with different icon if desired
+  iconUrl: 'images/marker-end.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32]
+});
+
+const icon3 = L.icon({
+  iconUrl: 'images/marker-checkpoint.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32]
+});
+
+const icon4 = L.icon({
+  iconUrl: 'images/marker-bitchest.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32]
+});
+
+const icon5 = L.icon({
+  iconUrl: 'images/marker-partchest.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32]
+});
+
+const icon6 = L.icon({
+  iconUrl: 'images/marker-color.png',
   iconSize: [32, 32],
   iconAnchor: [16, 32]
 });
