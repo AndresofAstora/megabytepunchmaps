@@ -345,9 +345,9 @@ mapWrapper.addEventListener('click', e => {
     const y = Math.round((e.clientY - rect.top) / scale);
 
     const text = `${x}, ${y}`;
+    const text = `x:${x}, y:${y}`;
 
-    navigator.clipboard.writeText(text);
-
+    navigator.clipboard?.writeText(text) || prompt("Copy:", text);
 });
 
 /* LEGEND */
