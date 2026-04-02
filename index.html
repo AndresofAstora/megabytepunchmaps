@@ -161,10 +161,32 @@
 </div>
 
 <script>
+let scale = 1;
+let currentMap = null;
+
+const maps = {
+    map1: {
+        img: "maps/electrocaves1.png",
+        markers: [
+            {x: 200, y: 150, type: 'enemy'},
+            {x: 400, y: 300, type: 'loot'}
+        ]
+    },
+    map2: {
+        img: "maps/electrocaves2.png",
+        markers: [
+            {x: 100, y: 200, type: 'loot'}
+        ]
+    },
+    map3: {
+        img: "maps/electrocaves3.png",
+        markers: [
+            {x: 500, y: 400, type: 'enemy'}
+        ]
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-
-    let scale = 1;
-
     const mapImg = document.getElementById('mapImage');
 
     mapImg.addEventListener('mousemove', e => {
@@ -173,16 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.round((e.clientY - rect.top) / scale);
         document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
     });
-
 });
-
-const markerData = [
-    {x: 200, y: 150, type: 'enemy'},
-    {x: 400, y: 300, type: 'loot'},
-    {x: 600, y: 500, type: 'enemy'}
-];
-
-let currentMap = null;
 
 function openMap(mapKey) {
     currentMap = maps[mapKey];
@@ -227,28 +240,6 @@ function loadMarkers() {
         container.appendChild(div);
     });
 }
-
-const maps = {
-    map1: {
-        img: "maps/electrocaves1.png",
-        markers: [
-            {x: 200, y: 150, type: 'enemy'},
-            {x: 400, y: 300, type: 'loot'}
-        ]
-    },
-    map2: {
-        img: "maps/electrocaves2.png",
-        markers: [
-            {x: 100, y: 200, type: 'loot'}
-        ]
-    },
-    map3: {
-        img: "maps/electrocaves3.png",
-        markers: [
-            {x: 500, y: 400, type: 'enemy'}
-        ]
-    }
-};
 
 function toggleType(type, checkbox) {
     document.querySelectorAll(`.${type}`).forEach(el => {
