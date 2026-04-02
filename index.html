@@ -1,22 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Megabyte Punch Map</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0f1115;
+        color: #e5e7eb;
+    }
+
+    .hidden { display: none; }
+
+    /* Landing Page */
+    .menu {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .map-btn {
+        background: #1a1d24;
+        border: 1px solid #2a2f3a;
+        padding: 30px 40px;
+        cursor: pointer;
+        transition: 0.2s ease;
+        font-size: 18px;
+    }
+
+    .map-btn:hover {
+        transform: scale(1.08);
+        background: #222733;
+    }
+
+    /* Map View */
+    .map-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .map-img {
+        transform-origin: top left;
+        transition: transform 0.1s;
+    }
+
+    /* Back Button */
+    .back-btn {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        padding: 10px 14px;
+        background: #1a1d24;
+        border: 1px solid #333;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    /* Zoom Controls */
+    .zoom-controls {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .zoom-btn {
+        padding: 10px;
+        background: #1a1d24;
+        border: 1px solid #333;
+        cursor: pointer;
+    }
+
+    /* Legend */
+    .legend {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #1a1d24;
+        padding: 15px;
+        border: 1px solid #333;
+        width: 180px;
+    }
+
+    .legend label {
+        display: block;
+        margin-bottom: 8px;
+        cursor: pointer;
+    }
+
+    /* Coordinates */
+    .coords {
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        background: #1a1d24;
+        padding: 6px 10px;
+        border: 1px solid #333;
+        font-size: 12px;
+    }
+
+    /* Marker */
+    .marker {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .enemy { background: red; }
+    .loot { background: gold; }
+</style>
+</head>
 <body>
-  <div id="map"></div>
 
-  <div id="legend">
-    <h3>Legend</h3>
+<!-- MENU -->
+<div id="menu" class="menu">
+    <div class="map-btn" onclick="openMap('map1')">Electro Caves 1</div>
+    <div class="map-btn" onclick="openMap('map2')">Electro Caves 2</div>
+    <div class="map-btn" onclick="openMap('map3')">Electro Caves 3</div>
+</div>
 
-    <div class="legend-item">
-      <input type="checkbox" id="type1" checked>
-      <label for="type1">Type 1</label>
+<!-- MAP VIEW -->
+<div id="mapView" class="hidden map-container">
+
+    <div class="back-btn" onclick="goBack()">← Back</div>
+
+    <img id="mapImage" class="map-img" src="https://via.placeholder.com/1200x800" />
+
+    <div id="markers"></div>
+
+    <!-- Zoom -->
+    <div class="zoom-controls">
+        <div class="zoom-btn" onclick="zoomIn()">+</div>
+        <div class="zoom-btn" onclick="zoomOut()">−</div>
     </div>
 
-    <div class="legend-item">
-      <input type="checkbox" id="type2" checked>
-      <label for="type2">Type 2</label>
+    <!-- Legend -->
+    <div class="legend">
+        <label><input type="checkbox" checked onchange="toggleType('enemy', this)"> Enemies</label>
+        <label><input type="checkbox" checked onchange="toggleType('loot', this)"> Loot</label>
+        <hr>
+        <button onclick="toggleAll()">Toggle All</button>
     </div>
 
-    <button id="toggleAll">Toggle All</button>
-  </div>
+    <!-- Coordinates -->
+    <div class="coords" id="coords">X: 0 Y: 0</div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
+</div>
+
+<script>
+let scale = 1;
+
+const markerData = [
+    {x: 200, y: 150, type: 'enemy'},
+    {x: 400, y: 300, type: 'loot'},
+    {x: 600, y: 500, type: 'enemy'}
+];
+
+function openMap(map) {
+    document.getElementById('menu').classList.add('hidden');
+    document.getElementById('mapView').classList.remove('hidden');
+    loadMarkers();
+}
+
+function goBack() {
+    document.getElementById('menu').classList.remove('hidden');
+    document.getElementById('mapView').classList.add('hidden');
+}
+
+function zoomIn() {
+    scale *= 1.2;
+    updateZoom();
+}
+
+function zoomOut() {
+    scale /= 1.2;
+    updateZoom();
+}
+
+function updateZoom() {
+    document.getElementById('mapImage').style.transform = `scale(${scale})`;
+}
+
+function loadMarkers() {
+    const container = document.getElementById('markers');
+    container.innerHTML = '';
+
+    markerData.forEach(m => {
+        const div = document.createElement('div');
+        div.className = `marker ${m.type}`;
+        div.style.left = m.x + 'px';
+        div.style.top = m.y + 'px';
+        div.dataset.type = m.type;
+        container.appendChild(div);
+    });
+}
+
+function toggleType(type, checkbox) {
+    document.querySelectorAll(`.${type}`).forEach(el => {
+        el.style.display = checkbox.checked ? 'block' : 'none';
+    });
+}
+
+function toggleAll() {
+    const boxes = document.querySelectorAll('.legend input');
+    const allChecked = [...boxes].every(b => b.checked);
+
+    boxes.forEach(b => {
+        b.checked = !allChecked;
+        b.dispatchEvent(new Event('change'));
+    });
+}
+
+/* Coordinates */
+const mapImg = document.getElementById('mapImage');
+mapImg.addEventListener('mousemove', e => {
+    const rect = mapImg.getBoundingClientRect();
+    const x = Math.round((e.clientX - rect.left) / scale);
+    const y = Math.round((e.clientY - rect.top) / scale);
+    document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
+});
+</script>
+
 </body>
+</html>
