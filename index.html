@@ -261,21 +261,30 @@ function applyTransform() {
 }
 
 /* PAN */
-mapView.addEventListener('wheel', e => {
-    e.preventDefault(); // prevent page scrolling
+mapView.addEventListener('mousedown', e => {
+    if (e.target.closest('.legend, .zoom-controls, .back-btn')) return;
+    isDragging = true;
+    startX = e.clientX - offsetX;
+    startY = e.clientY - offsetY;
+    
+    // store starting mouse position relative to current offset
+    startX = e.clientX - offsetX;
+    startY = e.clientY - offsetY;
 
-    const rect = mapWrapper.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    mapView.classList.add('dragging');
+});
 
-    // Zoom factor: scroll up = zoom in, scroll down = zoom out
-    const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+    mapView.classList.remove('dragging');
+});
 
-    // Optional: adjust offset so zoom is centered on cursor
-    offsetX = offsetX - mouseX * (zoomFactor - 1);
-    offsetY = offsetY - mouseY * (zoomFactor - 1);
+window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
 
-    scale *= zoomFactor;
+    offsetX = e.clientX - startX;
+    offsetY = e.clientY - startY;
+
     applyTransform();
 });
 
