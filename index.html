@@ -3,165 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <title>Megabyte Punch Map</title>
+
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #0f1115;
-        color: #e5e7eb;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f1115;
+    color: #e5e7eb;
+}
 
-    .hidden { display: none; }
+.hidden { display: none; }
 
-    /* Landing Page */
-    .menu {
-        display: flex;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-    }
+/* MENU */
+.menu {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
 
-    .map-btn {
-        background: #1a1d24;
-        border: 1px solid #2a2f3a;
-        padding: 30px 40px;
-        cursor: pointer;
-        transition: 0.2s ease;
-        font-size: 18px;
-    }
+.map-btn {
+    background: #1a1d24;
+    border: 1px solid #2a2f3a;
+    padding: 30px 40px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
 
-    .map-btn:hover {
-        transform: scale(1.08);
-        background: #222733;
-    }
+.map-btn:hover {
+    transform: scale(1.08);
+}
 
-    /* Map View */
-    .map-container {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-    }
+/* MAP */
+.map-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    cursor: grab;
+}
 
-    .map-img {
-        transform-origin: top left;
-        transition: transform 0.1s;
-    }
+.map-container.dragging {
+    cursor: grabbing;
+}
 
-    /* Back Button */
-    .back-btn {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        padding: 10px 14px;
-        background: #1a1d24;
-        border: 1px solid #333;
-        cursor: pointer;
-        z-index: 10;
-    }
+.map-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+}
 
-    /* Zoom Controls */
-    .zoom-controls {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+.map-img {
+    display: block;
+}
 
-    .zoom-btn {
-        padding: 10px;
-        background: #1a1d24;
-        border: 1px solid #333;
-        cursor: pointer;
-    }
+#markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-    /* Legend */
-    .legend {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: #1a1d24;
-        padding: 15px;
-        border: 1px solid #333;
-        width: 180px;
-    }
+/* UI */
+.back-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 10px;
+    background: #1a1d24;
+    border: 1px solid #333;
+    cursor: pointer;
+    z-index: 10;
+}
 
-    .legend label {
-        display: block;
-        margin-bottom: 8px;
-        cursor: pointer;
-    }
+.zoom-controls {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
-    /* Coordinates */
-    .coords {
-        position: absolute;
-        bottom: 10px;
-        right: 15px;
-        background: #1a1d24;
-        padding: 6px 10px;
-        border: 1px solid #333;
-        font-size: 12px;
-    }
+.zoom-btn {
+    margin: 5px 0;
+    padding: 10px;
+    background: #1a1d24;
+    border: 1px solid #333;
+    cursor: pointer;
+}
 
-    /* Marker */
-    .marker {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-    }
+.legend {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1a1d24;
+    padding: 10px;
+    border: 1px solid #333;
+}
 
-    .enemy { background: red; }
-    .loot { background: gold; }
+.coords {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #1a1d24;
+    padding: 5px 10px;
+    border: 1px solid #333;
+}
+
+/* MARKERS */
+.marker {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.enemy { background: red; }
+.loot { background: gold; }
+
 </style>
 </head>
+
 <body>
 
-<!-- MENU -->
 <div id="menu" class="menu">
-<div class="map-btn" data-map="map1">Electro Caves 1</div>
-<div class="map-btn" data-map="map2">Electro Caves 2</div>
-<div class="map-btn" data-map="map3">Electro Caves 3</div>
+    <div class="map-btn" data-map="map1">Electro Caves 1</div>
+    <div class="map-btn" data-map="map2">Electro Caves 2</div>
+    <div class="map-btn" data-map="map3">Electro Caves 3</div>
 </div>
 
-<!-- MAP VIEW -->
 <div id="mapView" class="hidden map-container">
 
-    <div class="back-btn" onclick="goBack()">← Back</div>
+    <div class="back-btn">← Back</div>
 
-    <img id="mapImage" src="maps/electrocaves1.png" />
+    <div id="mapWrapper" class="map-wrapper">
+        <img id="mapImage" class="map-img" src="">
+        <div id="markers"></div>
+    </div>
 
-    <div id="markers"></div>
-
-    <!-- Zoom -->
     <div class="zoom-controls">
-        <div class="zoom-btn" onclick="zoomIn()">+</div>
-        <div class="zoom-btn" onclick="zoomOut()">−</div>
+        <div class="zoom-btn" id="zoomIn">+</div>
+        <div class="zoom-btn" id="zoomOut">−</div>
     </div>
 
-    <!-- Legend -->
     <div class="legend">
-        <label><input type="checkbox" checked onchange="toggleType('enemy', this)"> Enemies</label>
-        <label><input type="checkbox" checked onchange="toggleType('loot', this)"> Loot</label>
-        <hr>
-        <button onclick="toggleAll()">Toggle All</button>
+        <label><input type="checkbox" checked data-type="enemy"> Enemies</label><br>
+        <label><input type="checkbox" checked data-type="loot"> Loot</label><br>
+        <button id="toggleAll">Toggle All</button>
     </div>
 
-    <!-- Coordinates -->
     <div class="coords" id="coords">X: 0 Y: 0</div>
 
 </div>
 
 <script>
 let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
+let isDragging = false;
+let startX, startY;
+
 let currentMap = null;
 
 const maps = {
@@ -186,96 +189,117 @@ const maps = {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+const menu = document.getElementById('menu');
+const mapView = document.getElementById('mapView');
+const mapWrapper = document.getElementById('mapWrapper');
+const mapImage = document.getElementById('mapImage');
+const markersContainer = document.getElementById('markers');
 
-    const mapImg = document.getElementById('mapImage');
-
-    // ✅ FIX: bind button clicks properly
-    document.querySelectorAll('.map-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const mapKey = btn.dataset.map;
-            openMap(mapKey);
-        });
+/* BUTTONS */
+document.querySelectorAll('.map-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        openMap(btn.dataset.map);
     });
-
-    // coordinates
-    mapImg.addEventListener('mousemove', e => {
-        const rect = mapImg.getBoundingClientRect();
-        const x = Math.round((e.clientX - rect.left) / scale);
-        const y = Math.round((e.clientY - rect.top) / scale);
-        document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
-    });
-
 });
 
-function openMap(mapKey) {
-    currentMap = maps[mapKey];
+document.querySelector('.back-btn').onclick = () => {
+    menu.classList.remove('hidden');
+    mapView.classList.add('hidden');
+};
 
-    document.getElementById('menu').classList.add('hidden');
-    document.getElementById('mapView').classList.remove('hidden');
+/* OPEN MAP */
+function openMap(key) {
+    currentMap = maps[key];
+    mapImage.src = currentMap.img;
 
-    document.getElementById('mapImage').src = currentMap.img;
+    menu.classList.add('hidden');
+    mapView.classList.remove('hidden');
 
+    resetView();
     loadMarkers();
 }
 
-function goBack() {
-    document.getElementById('menu').classList.remove('hidden');
-    document.getElementById('mapView').classList.add('hidden');
-}
-
-function zoomIn() {
-    scale *= 1.2;
-    updateZoom();
-}
-
-function zoomOut() {
-    scale /= 1.2;
-    updateZoom();
-}
-
-function updateZoom() {
-    document.getElementById('mapImage').style.transform = `scale(${scale})`;
-}
-
+/* MARKERS */
 function loadMarkers() {
-    const container = document.getElementById('markers');
-    container.innerHTML = '';
-
+    markersContainer.innerHTML = '';
     currentMap.markers.forEach(m => {
-        const div = document.createElement('div');
-        div.className = `marker ${m.type}`;
-        div.style.left = m.x + 'px';
-        div.style.top = m.y + 'px';
-        div.dataset.type = m.type;
-        container.appendChild(div);
+        const el = document.createElement('div');
+        el.className = `marker ${m.type}`;
+        el.style.left = m.x + 'px';
+        el.style.top = m.y + 'px';
+        el.dataset.type = m.type;
+        markersContainer.appendChild(el);
     });
 }
 
-function toggleType(type, checkbox) {
-    document.querySelectorAll(`.${type}`).forEach(el => {
-        el.style.display = checkbox.checked ? 'block' : 'none';
-    });
+/* ZOOM */
+document.getElementById('zoomIn').onclick = () => zoom(1.2);
+document.getElementById('zoomOut').onclick = () => zoom(0.8);
+
+function zoom(factor) {
+    scale *= factor;
+    applyTransform();
 }
 
-function toggleAll() {
-    const boxes = document.querySelectorAll('.legend input');
-    const allChecked = [...boxes].every(b => b.checked);
-
-    boxes.forEach(b => {
-        b.checked = !allChecked;
-        b.dispatchEvent(new Event('change'));
-    });
+function applyTransform() {
+    mapWrapper.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
 }
 
-/* Coordinates */
-const mapImg = document.getElementById('mapImage');
-mapImg.addEventListener('mousemove', e => {
-    const rect = mapImg.getBoundingClientRect();
+/* PAN */
+mapView.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.clientX - offsetX;
+    startY = e.clientY - offsetY;
+    mapView.classList.add('dragging');
+});
+
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+    mapView.classList.remove('dragging');
+});
+
+window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    offsetX = e.clientX - startX;
+    offsetY = e.clientY - startY;
+    applyTransform();
+});
+
+/* COORDS */
+mapImage.addEventListener('mousemove', e => {
+    const rect = mapImage.getBoundingClientRect();
     const x = Math.round((e.clientX - rect.left) / scale);
     const y = Math.round((e.clientY - rect.top) / scale);
     document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
 });
+
+/* LEGEND */
+document.querySelectorAll('.legend input').forEach(cb => {
+    cb.addEventListener('change', () => {
+        document.querySelectorAll(`.${cb.dataset.type}`).forEach(el => {
+            el.style.display = cb.checked ? 'block' : 'none';
+        });
+    });
+});
+
+document.getElementById('toggleAll').onclick = () => {
+    const boxes = document.querySelectorAll('.legend input');
+    const allOn = [...boxes].every(b => b.checked);
+
+    boxes.forEach(b => {
+        b.checked = !allOn;
+        b.dispatchEvent(new Event('change'));
+    });
+};
+
+/* RESET */
+function resetView() {
+    scale = 1;
+    offsetX = 0;
+    offsetY = 0;
+    applyTransform();
+}
+
 </script>
 
 </body>
