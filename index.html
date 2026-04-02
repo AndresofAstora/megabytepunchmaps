@@ -186,8 +186,25 @@ const maps = {
     map1: {
         img: "maps/electrocaves1.png",
         markers: [
-            {x: 200, y: 150, type: 'enemy'},
-            {x: 400, y: 300, type: 'loot'}
+            {468, 379, type: 'start'},
+            {x: 200, y: 150, type: 'checkpoint'},
+            {x: 200, y: 150, type: 'checkpoint'},
+            {x: 200, y: 150, type: 'checkpoint'},
+            {x: 200, y: 150, type: 'checkpoint'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'bit chest'},
+            {x: 200, y: 150, type: 'part chest'},
+            {x: 200, y: 150, type: 'part chest'},
+            {x: 200, y: 150, type: 'part chest'},
+            {x: 200, y: 150, type: 'part chest'},
+            {x: 200, y: 150, type: 'part chest'},
+            {x: 200, y: 150, type: 'color capsule'},
+            {x: 400, y: 300, type: 'stage exit'}
         ]
     },
     map2: {
@@ -319,7 +336,6 @@ mapWrapper.addEventListener('mousemove', e => {
 });
 
 mapWrapper.addEventListener('click', e => {
-    // ignore clicks on UI
     if (e.target.closest('.legend, .zoom-controls, .back-btn')) return;
 
     const rect = mapWrapper.getBoundingClientRect();
@@ -329,10 +345,20 @@ mapWrapper.addEventListener('click', e => {
 
     const text = `x:${x}, y:${y}`;
 
-    navigator.clipboard?.writeText(text) || prompt("Copy:", text);
+    // force clipboard write
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text);
+    } else {
+        // fallback (guaranteed)
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+    }
 
-    // optional visual feedback
-    //showCopied(text, e.clientX, e.clientY);
+    showCopied(text, e.clientX, e.clientY);
 });
 
 /* LEGEND */
