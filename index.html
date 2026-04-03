@@ -192,9 +192,9 @@ body {
     <div class="map-btn" data-map="map1">Electro Caves 1</div>
     <div class="map-btn" data-map="map2">Electro Caves 2</div>
     <div class="map-btn" data-map="map3">Electro Caves 3</div>
-    <div class="map-btn" data-map="map1">Megaclopolis 1</div>
-    <div class="map-btn" data-map="map2">Megaclopolis 2</div>
-    <div class="map-btn" data-map="map3">Megaclopolis 3</div>
+    <div class="map-btn" data-map="map4">Megaclopolis 1</div>
+    <div class="map-btn" data-map="map5">Megaclopolis 2</div>
+    <div class="map-btn" data-map="map6">Megaclopolis 3</div>
 </div>
 
 <div id="mapView" class="hidden map-container">
@@ -424,14 +424,14 @@ window.addEventListener('mouseup', () => {
 
 mapView.addEventListener('mousemove', e => {
 
-    // 🟢 DRAG
+    // DRAG
     if (isDragging) {
         offsetX = e.clientX - startX;
         offsetY = e.clientY - startY;
         applyTransform();
     }
 
-    // 🟢 COORDS
+    // COORDS
     const x = Math.round((e.clientX - offsetX) / scale);
     const y = Math.round((e.clientY - offsetY) / scale);
 
