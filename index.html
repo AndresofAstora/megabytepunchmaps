@@ -369,8 +369,10 @@ mapView.addEventListener('wheel', e => {
     applyTransform();
 }, { passive: false });
     
-/* PAN */
 mapView.addEventListener('mousedown', e => {
+    // ignore UI clicks
+    if (e.target.closest('.legend, .zoom-controls, .back-btn')) return;
+
     isDragging = true;
     startX = e.clientX - offsetX;
     startY = e.clientY - offsetY;
@@ -381,14 +383,15 @@ window.addEventListener('mouseup', () => {
 });
 
 mapView.addEventListener('mousemove', e => {
-    const x = Math.round((e.clientX - offsetX) / scale);
-    const y = Math.round((e.clientY - offsetY) / scale);
 
-    document.getElementById('coords').innerText = `X: ${x} Y: ${y}`;
-});
+    // 🟢 DRAG
+    if (isDragging) {
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+        applyTransform();
+    }
 
-/* COORDS */
-mapView.addEventListener('mousemove', e => {
+    // 🟢 COORDS
     const x = Math.round((e.clientX - offsetX) / scale);
     const y = Math.round((e.clientY - offsetY) / scale);
 
